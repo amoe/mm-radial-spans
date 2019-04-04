@@ -1,7 +1,24 @@
 <template>
   <div class="home">
-    <textarea rows="24" cols="80">{{textareaContent}}</textarea>
+    <div>
+      <draggable v-model="selectors" ghost-class="ghost">
+        <div v-for="selector in selectors" :key="selector.id" class="item">
+          <span>Selector {{selector.id}}</span>
+          <el-select v-model="selector.value" placeholder="Select">
+            <el-option v-for="item in options"
+                       :key="item.value"
+                       :label="item.label"
+                       :value="item.value">
+            </el-option>
+          </el-select> 
 
+        </div>
+      </draggable>
+    </div>
+
+    <p>Configured values: {{selectors}}</p>
+
+    <textarea rows="24" cols="80">{{textareaContent}}</textarea>
   </div>
 </template>
 
@@ -12,13 +29,38 @@ import axios from 'axios';
 import {SAMPLE_QUERY} from '@/sample-query';
 import {getSpanPropertyNames} from '@/query-utils';
 
+import Draggable from 'vuedraggable';
+
+const AVAILABLE_OPTIONS = [
+    {value: 'optFoo',
+     label: 'Foo'},
+    {value: 'optBar',
+     label: 'Bar'},
+    {value: 'optBaz',
+     label: 'Baz'}
+];
+
 export default Vue.extend({
     name: 'home',
-    components: {},
+    components: {Draggable},
     data() {
         return {
             textareaContent: "",
-            spanProperties: []
+            spanProperties: [],
+            options: AVAILABLE_OPTIONS,
+            selectors: [
+                {
+                    id: 1,
+                    value: ''
+                },
+                {
+                    id: 2,
+                    value: ''
+                },
+                {
+                    id: 3,
+                    value: ''
+                }]
         };
     },
     created() {
@@ -43,3 +85,13 @@ export default Vue.extend({
     }
 });
 </script>
+
+<style type="less">
+div.item {
+    display: inline;
+}
+
+.ghost {
+    opacity: 0.1;
+}
+</style>
