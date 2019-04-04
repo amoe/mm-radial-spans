@@ -18,7 +18,7 @@
 
     <p>Configured values: {{selectors}}</p>
 
-    <textarea rows="24" cols="80">{{textareaContent}}</textarea>
+    <textarea rows="24" cols="80">{{extractedSpans}}</textarea>
   </div>
 </template>
 
@@ -46,6 +46,7 @@ export default Vue.extend({
     data() {
         return {
             textareaContent: "",
+            extractedSpans: [] as string[],
             spanProperties: [],
             options: AVAILABLE_OPTIONS,
             selectors: [
@@ -79,6 +80,18 @@ export default Vue.extend({
             // And design the interface.
             for (let document of resultDocuments) {
                 for (let spanProperty of spanProperties) {
+                    const spansList = document[spanProperty].spans as any;
+                    for (let spanDefinition of spansList) {
+                        const fromPosition = spanDefinition.from;
+                        const toPosition = spanDefinition.to;
+                        const targetFieldName = spanDefinition.target;
+
+                        const referentText = document[targetFieldName];
+
+                        const spanContent = referentText.substring(fromPosition, toPosition);
+
+                        this.extractedSpans.push(spanContent);
+                    }
                 }
             }
         });
