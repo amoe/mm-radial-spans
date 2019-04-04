@@ -20,3 +20,4 @@ interface KeyTypeDefinition {
     class: string;
 }
 
+

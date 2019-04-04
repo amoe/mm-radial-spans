@@ -1,5 +1,7 @@
 <template>
   <div class="home">
+    <textarea rows="24" cols="80">{{textareaContent}}</textarea>
+
   </div>
 </template>
 
@@ -13,16 +15,30 @@ import {getSpanPropertyNames} from '@/query-utils';
 export default Vue.extend({
     name: 'home',
     components: {},
+    data() {
+        return {
+            textareaContent: "",
+            spanProperties: []
+        };
+    },
     created() {
         console.log("inside created hook: %o", axios);
 
         const query: MicroMacroQuery = SAMPLE_QUERY as MicroMacroQuery;
         const spanProperties = getSpanPropertyNames(SAMPLE_QUERY);
 
-        console.log("properties are %o", spanProperties);
-
         axios.post("/api/query/select", SAMPLE_QUERY).then(r => {
-//            console.log(JSON.stringify(r.data));
+            console.log("received result data");
+
+            const resultDocuments = r.data;
+
+            // What we are doing here is basically a clojure-ish group by.
+            // But we need to fake out some data before we can progress much further.
+            // And design the interface.
+            for (let document of resultDocuments) {
+                for (let spanProperty of spanProperties) {
+                }
+            }
         });
     }
 });
