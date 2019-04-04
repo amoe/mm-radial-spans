@@ -21,3 +21,10 @@ interface KeyTypeDefinition {
 }
 
 
+// key is actually the name of a span-property
+// value is an array of UNDIFFERENTIATED span contents
+// that is we can't tell which document any given span originated from, only
+// that it applied to a literal represented by string 'foo'
+interface SpanSearchResults {
+    [key: string]: string[]
+}

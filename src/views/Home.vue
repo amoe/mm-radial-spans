@@ -18,7 +18,7 @@
 
     <p>Configured values: {{selectors}}</p>
 
-    <textarea rows="24" cols="80">{{extractedSpans}}</textarea>
+    <textarea rows="24" cols="80">{{searchResults}}</textarea>
   </div>
 </template>
 
@@ -32,12 +32,8 @@ import {getSpanPropertyNames} from '@/query-utils';
 import Draggable from 'vuedraggable';
 
 const AVAILABLE_OPTIONS = [
-    {value: 'optFoo',
-     label: 'Foo'},
-    {value: 'optBar',
-     label: 'Bar'},
-    {value: 'optBaz',
-     label: 'Baz'}
+    {value: 'persName',
+     label: 'persName'}
 ];
 
 export default Vue.extend({
@@ -46,8 +42,7 @@ export default Vue.extend({
     data() {
         return {
             textareaContent: "",
-            extractedSpans: [] as string[],
-            spanProperties: [],
+            searchResults: {} as SpanSearchResults,
             options: AVAILABLE_OPTIONS,
             selectors: [
                 {
@@ -61,17 +56,21 @@ export default Vue.extend({
                 {
                     id: 3,
                     value: ''
-                }]
+                }
+            ]
         };
     },
     created() {
-        console.log("inside created hook: %o", axios);
-
         const query: MicroMacroQuery = SAMPLE_QUERY as MicroMacroQuery;
         const spanProperties = getSpanPropertyNames(SAMPLE_QUERY);
 
+        // initialize all
+        for (let spanProperty of spanProperties) {
+            Vue.set(this.searchResults, spanProperty, []);
+        }
+
         axios.post("/api/query/select", SAMPLE_QUERY).then(r => {
-            console.log("received result data");
+            console.log("PROCESSING");
 
             const resultDocuments = r.data;
 
@@ -84,16 +83,20 @@ export default Vue.extend({
                     for (let spanDefinition of spansList) {
                         const fromPosition = spanDefinition.from;
                         const toPosition = spanDefinition.to;
-                        const targetFieldName = spanDefinition.target;
 
+                        // get what the span refers to; this might just be a coincidence.
+                        const targetFieldName = spanDefinition.target;
                         const referentText = document[targetFieldName];
 
                         const spanContent = referentText.substring(fromPosition, toPosition);
 
-                        this.extractedSpans.push(spanContent);
+                        // at present this is just going to flatten out all the spans.
+                        this.searchResults[spanProperty].push(spanContent);
                     }
                 }
             }
+
+            console.log("DONE");
         });
     }
 });
