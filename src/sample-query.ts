@@ -1,13 +1,13 @@
 const SAMPLE_QUERY: any = {
     "table": "ob-all5",
-    "filter": "a&b",
+    "filter": "aa & ab",
     "limit": 2,
     "orderBy": {
         "context": "",
         "clauses": []
     },
     "literals": {
-        "a": {
+        "aa": {
             "type": "present",
             "args": "true",
             "key": {
@@ -33,7 +33,7 @@ const SAMPLE_QUERY: any = {
                 }
             }
         },
-        "b": {
+        "ab": {
             "type": "regex",
             "args": "death",
             "key": {

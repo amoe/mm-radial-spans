@@ -16,6 +16,8 @@
       </draggable>
     </div>
 
+    <literal-list></literal-list>
+
     <p>Configured values: {{selectors}}</p>
 
     <textarea rows="24" cols="80">{{searchResults}}</textarea>
@@ -25,6 +27,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import LiteralList from '@/components/LiteralList.vue';
 import axios from 'axios';
 import {SAMPLE_QUERY} from '@/sample-query';
 import {getSpanPropertyNames} from '@/query-utils';
@@ -36,9 +39,11 @@ const AVAILABLE_OPTIONS = [
      label: 'persName'}
 ];
 
+// http://localhost:8090/api/workspaces/load?name=davetest
+
 export default Vue.extend({
     name: 'home',
-    components: {Draggable},
+    components: {Draggable, LiteralList},
     data() {
         return {
             textareaContent: "",
