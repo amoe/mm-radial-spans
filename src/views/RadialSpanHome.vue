@@ -69,7 +69,7 @@ export default Vue.extend({
             Vue.set(this.searchResults, spanProperty, []);
         }
 
-        axios.post("/api/query/select", SAMPLE_QUERY).then(r => {
+        axios.post("/api/query/select/query", SAMPLE_QUERY).then(r => {
             console.log("PROCESSING");
 
             const resultDocuments = r.data;
@@ -77,16 +77,19 @@ export default Vue.extend({
             // What we are doing here is basically a clojure-ish group by.
             // But we need to fake out some data before we can progress much further.
             // And design the interface.
+
             for (let document of resultDocuments) {
+                const realDocument = JSON.parse(document);
+
                 for (let spanProperty of spanProperties) {
-                    const spansList = document[spanProperty].spans as any;
+                    const spansList = realDocument[spanProperty].spans as any;
                     for (let spanDefinition of spansList) {
                         const fromPosition = spanDefinition.from;
                         const toPosition = spanDefinition.to;
 
                         // get what the span refers to; this might just be a coincidence.
                         const targetFieldName = spanDefinition.target;
-                        const referentText = document[targetFieldName];
+                        const referentText = realDocument[targetFieldName];
 
                         const spanContent = referentText.substring(fromPosition, toPosition);
 

@@ -1,7 +1,7 @@
 const SAMPLE_QUERY: any = {
     "table": "ob-all5",
     "filter": "a&b",
-    "limit": 100,
+    "limit": 2,
     "orderBy": {
         "context": "",
         "clauses": []
