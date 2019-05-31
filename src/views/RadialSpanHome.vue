@@ -29,7 +29,7 @@ import Vue from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 import LiteralList from '@/components/LiteralList.vue';
 import axios from 'axios';
-import {SAMPLE_QUERY} from '@/sample-query';
+import {SAMPLE_QUERY, SAMPLE_PROXIMITY_QUERY} from '@/sample-query';
 import {getSpanPropertyNames} from '@/query-utils';
 
 import Draggable from 'vuedraggable';
